@@ -15,7 +15,16 @@ static CrashController *sharedInstance = nil;
 #pragma mark C Functions 
 void sighandler(int signal)
 {
+  const char* names[NSIG];
+  names[SIGABRT] = "SIGABRT";
+  names[SIGBUS] = "SIGBUS";
+  names[SIGFPE] = "SIGFPE";
+  names[SIGILL] = "SIGILL";
+  names[SIGPIPE] = "SIGPIPE";
+  names[SIGSEGV] = "SIGSEGV";
+
   NSArray *arr = [[CrashController sharedInstance] callstackAsArray];
+  NSLog(@"Signal: %s", names[signal]);
   NSLog(@"Callstack: %@", arr);
   
   exit(signal);

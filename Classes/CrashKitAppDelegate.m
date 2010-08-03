@@ -13,10 +13,17 @@
 
 @synthesize window;
 
-- (void)crash
+- (void)sigsegv
 {
   void (*func)() = 0;
   func();
+}
+
+- (void)sigfpe
+{
+  int zero = 0;  // LLVM is smart and actually catches divide by zero if it is constant
+  int i = 10/zero;
+  NSLog(@"Int: %i", i);
 }
 
 #pragma mark -
@@ -27,7 +34,8 @@
   [window makeKeyAndVisible];
 	
   [CrashController sharedInstance];
-  [self performSelector:@selector(crash) withObject:nil afterDelay:0.1];
+//    [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
+  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
