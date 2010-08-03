@@ -16,4 +16,5 @@
 + (CrashController*)sharedInstance;
 
 - (NSArray*)callstackAsArray;
+
 @end

@@ -56,6 +56,12 @@
   NSLog(@"String %@", str);
 }
 
+- (void)throwNSException
+{
+  NSException *e = [NSException exceptionWithName:@"TestException" reason:@"Testing CrashKit" userInfo:nil];
+  @throw e;
+}  
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -70,7 +76,8 @@
 //  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
-  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
+  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
   
 	return YES;
 }

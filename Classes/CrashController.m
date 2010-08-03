@@ -30,6 +30,14 @@ void sighandler(int signal)
   exit(signal);
 }
 
+void uncaughtExceptionHandler(NSException *exception)
+{
+  NSArray *arr = [[CrashController sharedInstance] callstackAsArray];
+  NSLog(@"Uncaught Exception");
+  NSLog(@"CALLSTACK: %@", arr);
+}
+
+
 @implementation CrashController
 
 #pragma mark Singleton methods
@@ -93,6 +101,8 @@ void sighandler(int signal)
     signal(SIGILL, sighandler);
     signal(SIGPIPE, sighandler);    
     signal(SIGSEGV, sighandler);
+    
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
   }
   
   return self;
@@ -104,8 +114,10 @@ void sighandler(int signal)
   signal(SIGBUS, SIG_DFL);
   signal(SIGFPE, SIG_DFL);
   signal(SIGILL, SIG_DFL);
-  signal(SIGPIPE, SIG_DFL);    
+  signal(SIGPIPE, SIG_DFL);
   signal(SIGSEGV, SIG_DFL);
+  
+  NSSetUncaughtExceptionHandler(NULL);
   
   [super dealloc];
 }
@@ -117,11 +129,8 @@ void sighandler(int signal)
   const int numFrames = backtrace(callstack, 128);
   char **symbols = backtrace_symbols(callstack, numFrames);
   
-  // Need to ignore the top frames which will be this function
-  // and sig trap interrupt function calls
-  int bottom = 3;
-  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:numFrames - bottom];
-  for (int i = bottom; i < numFrames; ++i) 
+  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:numFrames];
+  for (int i = 0; i < numFrames; ++i) 
   {
     [arr addObject:[NSString stringWithUTF8String:symbols[i]]];
   }
