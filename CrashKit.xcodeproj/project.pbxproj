@@ -14,6 +14,7 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		4E9F223C1208C7C200F0FFB3 /* CrashLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9F223B1208C7C200F0FFB3 /* CrashLogger.m */; };
+		4E9F22801208CED900F0FFB3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F227F1208CED900F0FFB3 /* MessageUI.framework */; };
 		4ECC9B681207769100FEA9E0 /* CrashController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECC9B671207769100FEA9E0 /* CrashController.m */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		32CA4F630368D1EE00C91783 /* CrashKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashKit_Prefix.pch; sourceTree = "<group>"; };
 		4E9F223A1208C7C200F0FFB3 /* CrashLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLogger.h; sourceTree = "<group>"; };
 		4E9F223B1208C7C200F0FFB3 /* CrashLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashLogger.m; sourceTree = "<group>"; };
+		4E9F227F1208CED900F0FFB3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4ECC9B661207769100FEA9E0 /* CrashController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashController.h; sourceTree = "<group>"; };
 		4ECC9B671207769100FEA9E0 /* CrashController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* CrashKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CrashKit-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
+				4E9F22801208CED900F0FFB3 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +108,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
+				4E9F227F1208CED900F0FFB3 /* MessageUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

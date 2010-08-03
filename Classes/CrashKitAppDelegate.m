@@ -71,13 +71,13 @@
 	
   [[CrashController sharedInstance] sendCrashReportsToEmail:@"crash@smartfulstudios.com"];
 
-//  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
+  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
-  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
   
 	return YES;
 }

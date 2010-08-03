@@ -7,20 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 @interface CrashLogger : NSObject 
 {
 }
 
+- (void)sendCrash:(NSDictionary*)crash;
+
 @end
 
-@interface CrashEmailLogger : CrashLogger
+@interface CrashEmailLogger : CrashLogger <MFMailComposeViewControllerDelegate>
 {
   NSString *email;
 }
 
 - (id)initWithEmail:(NSString *)toEmail;
+- (void)sendCrash:(NSDictionary*)crash;
 
 @property (nonatomic, copy) NSString *email;
 
