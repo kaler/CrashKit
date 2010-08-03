@@ -13,7 +13,7 @@
 
 @synthesize window;
 
-- (void)sigsegv
+- (void)sigbus
 {
   void (*func)() = 0;
   func();
@@ -26,6 +26,14 @@
   NSLog(@"Int: %i", i);
 }
 
+- (void)sigill
+{
+  typedef void(*FUNC)(void);
+  const static unsigned char insn[4] = { 0xff, 0xff, 0xff, 0xff };
+  void (*func)() = (FUNC)insn;
+  func();
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -34,8 +42,9 @@
   [window makeKeyAndVisible];
 	
   [CrashController sharedInstance];
-//    [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
-  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
+  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
