@@ -42,6 +42,7 @@
 
 - (void)sigpipe
 {
+  // Hmm, can't actually generate a SIGPIPE.
   FILE *f = popen("ls", "r");
   const char *buf[128];
   pwrite(fileno(f), buf, 128, 0);
