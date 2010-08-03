@@ -13,6 +13,11 @@
 
 @synthesize window;
 
+- (void)sigabrt
+{
+  abort();
+}
+
 - (void)sigbus
 {
   void (*func)() = 0;
@@ -42,9 +47,10 @@
   [window makeKeyAndVisible];
 	
   [CrashController sharedInstance];
+  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
-  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
