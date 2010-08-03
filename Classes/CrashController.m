@@ -7,6 +7,7 @@
 //
 
 #import "CrashController.h"
+#import "CrashLogger.h"
 #include <signal.h>
 #include <execinfo.h>
 
@@ -15,30 +16,33 @@ static CrashController *sharedInstance = nil;
 #pragma mark C Functions 
 void sighandler(int signal)
 {
-  const char* names[NSIG];
-  names[SIGABRT] = "SIGABRT";
-  names[SIGBUS] = "SIGBUS";
-  names[SIGFPE] = "SIGFPE";
-  names[SIGILL] = "SIGILL";
-  names[SIGPIPE] = "SIGPIPE";
-  names[SIGSEGV] = "SIGSEGV";
-
-  NSArray *arr = [[CrashController sharedInstance] callstackAsArray];
-  NSLog(@"Signal: %s", names[signal]);
-  NSLog(@"Callstack: %@", arr);
+  CrashController *crash = [CrashController sharedInstance];
+  NSArray *arr = [crash callstackAsArray];
+  
+  NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:arr, @"Callstack",
+                                                                      [NSNumber numberWithInt:signal], @"Signal",
+                                                                      nil];
+  [crash performSelectorOnMainThread:@selector(handleSignal:) withObject:userInfo waitUntilDone:YES];
   
   exit(signal);
 }
 
 void uncaughtExceptionHandler(NSException *exception)
 {
-  NSArray *arr = [[CrashController sharedInstance] callstackAsArray];
-  NSLog(@"Uncaught Exception");
-  NSLog(@"CALLSTACK: %@", arr);
+  CrashController *crash = [CrashController sharedInstance];
+  NSArray *arr = [crash callstackAsArray];
+  NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:arr, @"Callstack",
+                                                                      exception, @"Exception",
+                                                                      nil];
+  [crash performSelectorOnMainThread:@selector(handleNSException:) withObject:userInfo waitUntilDone:YES];
 }
 
+@interface CrashController()
+@property (nonatomic, retain) CrashLogger *logger;
+@end
 
 @implementation CrashController
+@synthesize logger;
 
 #pragma mark Singleton methods
 
@@ -103,6 +107,8 @@ void uncaughtExceptionHandler(NSException *exception)
     signal(SIGSEGV, sighandler);
     
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
+    logger = [[CrashLogger alloc] init];
   }
   
   return self;
@@ -119,10 +125,16 @@ void uncaughtExceptionHandler(NSException *exception)
   
   NSSetUncaughtExceptionHandler(NULL);
   
+  [logger release];
   [super dealloc];
 }
 
 #pragma mark methods
+- (void)sendCrashReportsToEmail:(NSString*)toEmail
+{
+  self.logger = [[CrashEmailLogger alloc] initWithEmail:toEmail];
+}
+
 - (NSArray*)callstackAsArray
 {
   void* callstack[128];
@@ -138,6 +150,29 @@ void uncaughtExceptionHandler(NSException *exception)
   free(symbols);
   
   return arr;
+}
+
+- (void)handleSignal:(NSDictionary*)userInfo
+{
+  const char* names[NSIG];
+  names[SIGABRT] = "SIGABRT";
+  names[SIGBUS] = "SIGBUS";
+  names[SIGFPE] = "SIGFPE";
+  names[SIGILL] = "SIGILL";
+  names[SIGPIPE] = "SIGPIPE";
+  names[SIGSEGV] = "SIGSEGV";
+  
+  NSNumber *signal = [userInfo objectForKey:@"Signal"];
+  NSArray *callstack = [userInfo objectForKey:@"Callstack"];
+  NSLog(@"Signal: %s", names[[signal intValue]]);
+  NSLog(@"Callstack: %@", callstack);
+}
+
+- (void)handleNSException:(NSDictionary*)userInfo
+{
+  NSArray *callstack = [userInfo objectForKey:@"Callstack"];
+  NSLog(@"Uncaught Exception");
+  NSLog(@"CALLSTACK: %@", callstack);
 }
 
 @end

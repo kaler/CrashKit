@@ -8,13 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+@class CrashLogger;
 
-@interface CrashController : NSObject {
-
+@interface CrashController : NSObject 
+{
+  CrashLogger *logger;
 }
 
 + (CrashController*)sharedInstance;
+- (void)sendCrashReportsToEmail:(NSString*)toEmail;
 
 - (NSArray*)callstackAsArray;
+- (void)handleSignal:(NSDictionary*)userInfo;
+- (void)handleNSException:(NSDictionary*)userInfo;
 
 @end

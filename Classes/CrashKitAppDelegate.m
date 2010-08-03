@@ -69,7 +69,7 @@
 {    
   [window makeKeyAndVisible];
 	
-  [CrashController sharedInstance];
+  [[CrashController sharedInstance] sendCrashReportsToEmail:@"crash@smartfulstudios.com"];
 
 //  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
