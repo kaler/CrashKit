@@ -14,6 +14,7 @@ static CrashController *sharedInstance = nil;
 #pragma mark C Functions 
 void sighandler(int signal)
 {
+  NSLog(@"sighandler");
 }
 
 @implementation CrashController
