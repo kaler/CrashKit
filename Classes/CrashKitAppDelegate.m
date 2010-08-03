@@ -48,6 +48,14 @@
   pwrite(fileno(f), buf, 128, 0);
 }
 
+- (void)sigsegv
+{
+  // This actually raises a SIGBUS.
+  NSString *str = [[NSString alloc] initWithUTF8String:"SIGSEGV STRING"];
+  [str release];
+  NSLog(@"String %@", str);
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -61,7 +69,8 @@
 //  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
-  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
+  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
