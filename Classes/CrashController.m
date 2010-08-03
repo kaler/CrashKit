@@ -108,8 +108,11 @@ void sighandler(int signal)
   const int numFrames = backtrace(callstack, 128);
   char **symbols = backtrace_symbols(callstack, numFrames);
   
-  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:numFrames];
-  for (int i = 0; i < numFrames; ++i) 
+  // Need to ignore the top frames which will be this function
+  // and sig trap interrupt function calls
+  int bottom = 3;
+  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:numFrames - bottom];
+  for (int i = bottom; i < numFrames; ++i) 
   {
     [arr addObject:[NSString stringWithUTF8String:symbols[i]]];
   }

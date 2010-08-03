@@ -13,6 +13,12 @@
 
 @synthesize window;
 
+- (void)crash
+{
+  void (*func)() = 0;
+  func();
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -21,6 +27,7 @@
   [window makeKeyAndVisible];
 	
   [CrashController sharedInstance];
+  [self performSelector:@selector(crash) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
