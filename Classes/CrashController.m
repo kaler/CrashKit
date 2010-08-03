@@ -8,13 +8,17 @@
 
 #import "CrashController.h"
 #include <signal.h>
+#include <execinfo.h>
 
 static CrashController *sharedInstance = nil;
 
 #pragma mark C Functions 
 void sighandler(int signal)
 {
-  NSLog(@"sighandler");
+  NSArray *arr = [[CrashController sharedInstance] callstackAsArray];
+  NSLog(@"Callstack: %@", arr);
+  
+  exit(signal);
 }
 
 @implementation CrashController
@@ -95,6 +99,24 @@ void sighandler(int signal)
   signal(SIGSEGV, SIG_DFL);
   
   [super dealloc];
+}
+
+#pragma mark methods
+- (NSArray*)callstackAsArray
+{
+  void* callstack[128];
+  const int numFrames = backtrace(callstack, 128);
+  char **symbols = backtrace_symbols(callstack, numFrames);
+  
+  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:numFrames];
+  for (int i = 0; i < numFrames; ++i) 
+  {
+    [arr addObject:[NSString stringWithUTF8String:symbols[i]]];
+  }
+  
+  free(symbols);
+  
+  return arr;
 }
 
 @end
