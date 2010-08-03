@@ -8,6 +8,7 @@
 
 #import "CrashKitAppDelegate.h"
 #import "CrashController.h"
+#include <unistd.h>
 
 @implementation CrashKitAppDelegate
 
@@ -39,6 +40,13 @@
   func();
 }
 
+- (void)sigpipe
+{
+  FILE *f = popen("ls", "r");
+  const char *buf[128];
+  pwrite(fileno(f), buf, 128, 0);
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -47,10 +55,12 @@
   [window makeKeyAndVisible];
 	
   [CrashController sharedInstance];
-  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
+
+//  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
+  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
