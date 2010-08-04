@@ -8,6 +8,9 @@
 
 #import "CrashLogger.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+
 @implementation CrashLogger
 
 - (void)sendCrash:(NSDictionary*)crash
@@ -107,3 +110,40 @@
 }  
 
 @end
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+
+@implementation CrashBugzScoutLogger
+@synthesize url, user, project, area;
+
+- (id)initWithURL:(NSString*)aUrl user:(NSString *)aUser project:(NSString *)aProject area:(NSString *)aArea
+{
+  if ((self = [super init]))
+  {
+    url = [aUrl copy];
+    user = [aUser copy];
+    project = [aProject copy];
+    area = [aArea copy];
+  }
+  
+  return self;
+}
+
+- (void)dealloc
+{
+  [url release];
+  [user release];
+  [project release];
+  [area release];
+  
+  [super dealloc];
+}
+
+- (void)sendCrash:(NSDictionary *)crash
+{
+  NSLog(@"CrashBugzScoutLogger sendCrash: %@, %@, %@, %@", self.url, self.user, self.project, self.area);
+}
+
+@end
+

@@ -22,8 +22,12 @@
   [window makeKeyAndVisible];
 	
   CrashController *crash = [CrashController sharedInstance];
-  [crash sendCrashReportsToEmail:@"crash@smartfulstudios.com"
-              withViewController:rootViewController];
+//  [crash sendCrashReportsToEmail:@"crash@smartfulstudios.com"
+//              withViewController:rootViewController];
+  [crash sendCrashReportsToBugzScoutURL:@"https://mysite.fogbugz.com/scoutsubmit.asp" 
+                               withUser:@"Parveen Kaler"
+                             forProject:@"Inbox"
+                               withArea:@"Misc"];
   crash.delegate = self;
   
 

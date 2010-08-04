@@ -10,6 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @interface CrashLogger : NSObject 
 {
 }
@@ -18,6 +19,7 @@
 
 @end
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @interface CrashEmailLogger : CrashLogger <MFMailComposeViewControllerDelegate>
 {
   NSString *email;
@@ -28,5 +30,24 @@
 
 - (id)initWithEmail:(NSString *)toEmail viewController:(UIViewController*)rootViewController;
 - (void)sendCrash:(NSDictionary*)crash;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@interface CrashBugzScoutLogger : CrashLogger
+{
+  NSString *url;
+  NSString *user;
+  NSString *project;
+  NSString *area;
+}
+
+- (id)initWithURL:(NSString*)aURL user:(NSString*)aUser project:(NSString*)aProject area:(NSString*)aArea;
+- (void)sendCrash:(NSDictionary*)crash;
+
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *user;
+@property (nonatomic, copy) NSString *project;
+@property (nonatomic, copy) NSString *area;
 
 @end

@@ -22,6 +22,7 @@
 
 + (CrashController*)sharedInstance;
 - (void)sendCrashReportsToEmail:(NSString*)toEmail withViewController:(UIViewController*)rootViewController;
+- (void)sendCrashReportsToBugzScoutURL:(NSString*)aURL withUser:(NSString*)aUser forProject:(NSString*)aProject withArea:(NSString*)aArea;
 
 - (NSArray*)callstackAsArray;
 - (void)handleSignal:(NSDictionary*)userInfo;
