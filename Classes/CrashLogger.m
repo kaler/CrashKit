@@ -12,11 +12,40 @@
 #pragma mark -
 
 @implementation CrashLogger
+@synthesize finishPump;
+
+- (id)init
+{
+  if ((self = [super init]))
+  {
+    finishPump = NO;
+  }
+  
+  return self;
+}
 
 - (void)sendCrash:(NSDictionary*)crash
 {
   // Do nothing
 }
+
+- (void)pumpRunLoop
+{
+  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+	CFArrayRef runLoopModesRef = CFRunLoopCopyAllModes(runLoop);
+  NSArray * runLoopModes = (NSArray*)runLoopModesRef;
+	
+	while (finishPump == NO)
+	{
+		for (NSString *mode in runLoopModes)
+		{
+      CFStringRef modeRef = (CFStringRef)mode;
+			CFRunLoopRunInMode(modeRef, 1.0f/120.0f, false);  // Pump the loop at 120 FPS
+		}
+	}
+	
+	CFRelease(runLoopModesRef);
+}  
 
 @end
 
@@ -24,15 +53,13 @@
 #pragma mark -
 
 @interface CrashEmailLogger()
-- (void)pumpRunLoop;
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, retain) UIViewController *rootViewController;
-@property BOOL sendEmailDone;
 @end
 
 
 @implementation CrashEmailLogger
-@synthesize email, rootViewController, sendEmailDone;
+@synthesize email, rootViewController;
 
 - (id)initWithEmail:(NSString*)toEmail viewController:(UIViewController*)aViewController
 {
@@ -40,7 +67,6 @@
   {
     email = [[NSString alloc] initWithString:toEmail];
     rootViewController = [aViewController retain];
-    sendEmailDone = FALSE;
   }
   
   return self;
@@ -76,7 +102,7 @@
     [self.rootViewController presentModalViewController:picker animated:YES];
     [picker release];
     
-    self.sendEmailDone = FALSE;
+    self.finishPump = NO;
     [self pumpRunLoop];
   }
   else
@@ -87,27 +113,9 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
-  self.sendEmailDone = TRUE;
+  self.finishPump = YES;
   [self.rootViewController dismissModalViewControllerAnimated:NO];
 }
-
-- (void)pumpRunLoop
-{
-  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
-	CFArrayRef runLoopModesRef = CFRunLoopCopyAllModes(runLoop);
-  NSArray * runLoopModes = (NSArray*)runLoopModesRef;
-	
-	while (!sendEmailDone)
-	{
-		for (NSString *mode in runLoopModes)
-		{
-      CFStringRef modeRef = (CFStringRef)mode;
-			CFRunLoopRunInMode(modeRef, 1.0f/120.0f, false);  // Pump the loop at 120 FPS
-		}
-	}
-	
-	CFRelease(runLoopModesRef);
-}  
 
 @end
 
@@ -143,6 +151,9 @@
 - (void)sendCrash:(NSDictionary *)crash
 {
   NSLog(@"CrashBugzScoutLogger sendCrash: %@, %@, %@, %@", self.url, self.user, self.project, self.area);
+  [self pumpRunLoop];
+  
+  self.finishPump = YES;
 }
 
 @end

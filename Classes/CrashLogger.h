@@ -13,9 +13,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @interface CrashLogger : NSObject 
 {
+  BOOL finishPump;
 }
 
 - (void)sendCrash:(NSDictionary*)crash;
+- (void)pumpRunLoop;
+
+@property BOOL finishPump;
 
 @end
 
@@ -24,8 +28,6 @@
 {
   NSString *email;
   UIViewController *rootViewController;
-  
-  BOOL sendEmailDone;
 }
 
 - (id)initWithEmail:(NSString *)toEmail viewController:(UIViewController*)rootViewController;
