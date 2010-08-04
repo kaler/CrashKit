@@ -22,12 +22,11 @@
 {
   NSString *email;
   UIViewController *rootViewController;
+  
+  BOOL sendEmailDone;
 }
 
 - (id)initWithEmail:(NSString *)toEmail viewController:(UIViewController*)rootViewController;
 - (void)sendCrash:(NSDictionary*)crash;
-
-@property (nonatomic, copy) NSString *email;
-@property (nonatomic, retain) UIViewController *rootViewController;
 
 @end

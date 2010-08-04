@@ -8,7 +8,6 @@
 
 #import "CrashLogger.h"
 
-
 @implementation CrashLogger
 
 - (void)sendCrash:(NSDictionary*)crash
@@ -18,8 +17,19 @@
 
 @end
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+
+@interface CrashEmailLogger()
+- (void)pumpRunLoop;
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, retain) UIViewController *rootViewController;
+@property BOOL sendEmailDone;
+@end
+
+
 @implementation CrashEmailLogger
-@synthesize email, rootViewController;
+@synthesize email, rootViewController, sendEmailDone;
 
 - (id)initWithEmail:(NSString*)toEmail viewController:(UIViewController*)aViewController
 {
@@ -27,6 +37,7 @@
   {
     email = [[NSString alloc] initWithString:toEmail];
     rootViewController = [aViewController retain];
+    sendEmailDone = FALSE;
   }
   
   return self;
@@ -61,6 +72,9 @@
     NSLog(@"ViewController: %@", self.rootViewController.title);
     [self.rootViewController presentModalViewController:picker animated:YES];
     [picker release];
+    
+    self.sendEmailDone = FALSE;
+    [self pumpRunLoop];
   }
   else
   {
@@ -70,7 +84,26 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
+  self.sendEmailDone = TRUE;
   [self.rootViewController dismissModalViewControllerAnimated:NO];
 }
+
+- (void)pumpRunLoop
+{
+  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+	CFArrayRef runLoopModesRef = CFRunLoopCopyAllModes(runLoop);
+  NSArray * runLoopModes = (NSArray*)runLoopModesRef;
+	
+	while (!sendEmailDone)
+	{
+		for (NSString *mode in runLoopModes)
+		{
+      CFStringRef modeRef = (CFStringRef)mode;
+			CFRunLoopRunInMode(modeRef, 1.0f/120.0f, false);  // Pump the loop at 120 FPS
+		}
+	}
+	
+	CFRelease(runLoopModesRef);
+}  
 
 @end
