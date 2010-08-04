@@ -19,13 +19,14 @@
 @end
 
 @implementation CrashEmailLogger
-@synthesize email;
+@synthesize email, rootViewController;
 
-- (id)initWithEmail:(NSString*)toEmail
+- (id)initWithEmail:(NSString*)toEmail viewController:(UIViewController*)aViewController
 {
   if ((self = [super init]))
   {
     email = [[NSString alloc] initWithString:toEmail];
+    rootViewController = [aViewController retain];
   }
   
   return self;
@@ -34,6 +35,7 @@
 - (void)dealloc
 {
   [email release];
+  [rootViewController release];
   [super dealloc];
 }
 
@@ -54,11 +56,10 @@
     NSData *data = [NSPropertyListSerialization dataFromPropertyList:crash 
                                                               format:NSPropertyListBinaryFormat_v1_0 
                                                     errorDescription:&error];
-    [picker addAttachmentData:data mimeType:@"text/plain" fileName:@"rainy"];
+    [picker addAttachmentData:data mimeType:@"text/plain" fileName:@"CrashReport"];
     
-    UIViewController *v = [UIApplication sharedApplication].keyWindow.rootViewController;
-    NSLog(@"ViewController: %@", v.title);
-    [v presentModalViewController:picker animated:YES];
+    NSLog(@"ViewController: %@", self.rootViewController.title);
+    [self.rootViewController presentModalViewController:picker animated:YES];
     [picker release];
   }
   else
@@ -69,8 +70,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
-  UIViewController *v = [UIApplication sharedApplication].keyWindow.rootViewController;
-  [v dismissModalViewControllerAnimated:NO];
+  [self.rootViewController dismissModalViewControllerAnimated:NO];
 }
 
 @end

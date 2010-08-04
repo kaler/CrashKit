@@ -12,7 +12,39 @@
 
 @implementation CrashKitAppDelegate
 
-@synthesize window;
+@synthesize window, rootViewController;
+
+#pragma mark -
+#pragma mark Application lifecycle
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
+{
+  [window makeKeyAndVisible];
+	
+  [[CrashController sharedInstance] sendCrashReportsToEmail:@"crash@smartfulstudios.com"
+                                         withViewController:rootViewController];
+
+  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
+//  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
+  
+	return YES;
+}
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)dealloc {
+  [window release];
+  [super dealloc];
+}
+
+#pragma mark -
+#pragma mark Test Methods
 
 - (void)sigabrt
 {
@@ -62,33 +94,6 @@
   @throw e;
 }  
 
-#pragma mark -
-#pragma mark Application lifecycle
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
-{    
-  [window makeKeyAndVisible];
-	
-  [[CrashController sharedInstance] sendCrashReportsToEmail:@"crash@smartfulstudios.com"];
-
-  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
-  
-	return YES;
-}
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)dealloc {
-  [window release];
-  [super dealloc];
-}
 
 
 @end

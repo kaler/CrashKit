@@ -137,9 +137,9 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 #pragma mark methods
-- (void)sendCrashReportsToEmail:(NSString*)toEmail
+- (void)sendCrashReportsToEmail:(NSString*)toEmail withViewController:(UIViewController*)rootViewController
 {
-  self.logger = [[CrashEmailLogger alloc] initWithEmail:toEmail];
+  self.logger = [[CrashEmailLogger alloc] initWithEmail:toEmail viewController:rootViewController];
 }
 
 - (NSArray*)callstackAsArray

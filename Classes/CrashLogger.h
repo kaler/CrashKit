@@ -21,11 +21,13 @@
 @interface CrashEmailLogger : CrashLogger <MFMailComposeViewControllerDelegate>
 {
   NSString *email;
+  UIViewController *rootViewController;
 }
 
-- (id)initWithEmail:(NSString *)toEmail;
+- (id)initWithEmail:(NSString *)toEmail viewController:(UIViewController*)rootViewController;
 - (void)sendCrash:(NSDictionary*)crash;
 
 @property (nonatomic, copy) NSString *email;
+@property (nonatomic, retain) UIViewController *rootViewController;
 
 @end

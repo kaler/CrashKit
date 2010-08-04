@@ -16,7 +16,7 @@
 }
 
 + (CrashController*)sharedInstance;
-- (void)sendCrashReportsToEmail:(NSString*)toEmail;
+- (void)sendCrashReportsToEmail:(NSString*)toEmail withViewController:(UIViewController*)rootViewController;
 
 - (NSArray*)callstackAsArray;
 - (void)handleSignal:(NSDictionary*)userInfo;

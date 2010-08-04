@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CrashKitAppDelegate : NSObject <UIApplicationDelegate> {
-    UIWindow *window;
+@interface CrashKitAppDelegate : NSObject <UIApplicationDelegate> 
+{
+  UIWindow *window;
+  UIViewController *rootViewController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) IBOutlet UIViewController *rootViewController;
 
 @end
 
