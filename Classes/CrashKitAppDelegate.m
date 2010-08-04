@@ -21,8 +21,11 @@
 {
   [window makeKeyAndVisible];
 	
-  [[CrashController sharedInstance] sendCrashReportsToEmail:@"crash@smartfulstudios.com"
-                                         withViewController:rootViewController];
+  CrashController *crash = [CrashController sharedInstance];
+  [crash sendCrashReportsToEmail:@"crash@smartfulstudios.com"
+              withViewController:rootViewController];
+  crash.delegate = self;
+  
 
   [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
 //  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
@@ -33,6 +36,17 @@
 //  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
   
 	return YES;
+}
+
+- (void)onCrash
+{
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Crash"
+                                                  message:@"The App has crashed and will attempt to send a crash report"
+                                                 delegate:nil
+                                        cancelButtonTitle:@"OK"
+                                        otherButtonTitles:nil];
+  [alert show];
+  [alert release];
 }
 
 #pragma mark -

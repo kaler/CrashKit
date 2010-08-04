@@ -10,9 +10,14 @@
 
 @class CrashLogger;
 
+@protocol CrashSaveDelegate
+- (void)onCrash;
+@end
+
 @interface CrashController : NSObject 
 {
   CrashLogger *logger;
+  id <CrashSaveDelegate> delegate;
 }
 
 + (CrashController*)sharedInstance;
@@ -21,5 +26,7 @@
 - (NSArray*)callstackAsArray;
 - (void)handleSignal:(NSDictionary*)userInfo;
 - (void)handleNSException:(NSDictionary*)userInfo;
+
+@property (nonatomic, assign) id <CrashSaveDelegate> delegate;
 
 @end

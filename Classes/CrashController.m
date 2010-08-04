@@ -49,7 +49,7 @@ void uncaughtExceptionHandler(NSException *exception)
 @end
 
 @implementation CrashController
-@synthesize logger;
+@synthesize logger, delegate;
 
 #pragma mark Singleton methods
 
@@ -161,11 +161,17 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)handleSignal:(NSDictionary*)userInfo
 {  
+  if (self.delegate)
+    [self.delegate onCrash];
+
   [self.logger sendCrash:userInfo];
 }
 
 - (void)handleNSException:(NSDictionary*)userInfo
 {
+  if (self.delegate)
+    [self.delegate onCrash];
+  
   [self.logger sendCrash:userInfo];
 }
 

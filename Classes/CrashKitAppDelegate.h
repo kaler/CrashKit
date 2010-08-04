@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CrashController.h"
 
-@interface CrashKitAppDelegate : NSObject <UIApplicationDelegate> 
+@interface CrashKitAppDelegate : NSObject <UIApplicationDelegate, CrashSaveDelegate> 
 {
   UIWindow *window;
   UIViewController *rootViewController;
