@@ -26,8 +26,10 @@ void sighandler(int signal)
   
   CrashController *crash = [CrashController sharedInstance];
   NSArray *arr = [crash callstackAsArray];
+  NSString *title = [NSString stringWithFormat:@"Crash: %@", [arr objectAtIndex:6]];  // The 6th frame is where the crash happens
   
   NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:arr, @"Callstack",
+                                                                      title, @"Title",
                                                                       [NSNumber numberWithInt:signal], @"Signal",
                                                                       [NSString stringWithUTF8String:names[signal]], @"Signal Name",
                                                                       nil];
@@ -38,7 +40,9 @@ void uncaughtExceptionHandler(NSException *exception)
 {
   CrashController *crash = [CrashController sharedInstance];
   NSArray *arr = [crash callstackAsArray];
+  NSString *title = [NSString stringWithFormat:@"Exception: %@", [arr objectAtIndex:8]];  // The 8th frame is where the exception is thrown
   NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:arr, @"Callstack",
+                                                                      title, @"Title",
                                                                       exception, @"Exception",
                                                                       nil];
   [crash performSelectorOnMainThread:@selector(handleNSException:) withObject:userInfo waitUntilDone:YES];

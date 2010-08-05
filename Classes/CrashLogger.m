@@ -150,6 +150,7 @@
 
 - (void)sendCrash:(NSDictionary *)crash
 {
+  NSLog(@"Crash: %@", crash);
   NSLog(@"CrashBugzScoutLogger sendCrash: %@, %@, %@, %@", self.urlString, self.user, self.project, self.area);
 
   NSURL *url = [NSURL URLWithString:self.urlString];
@@ -161,7 +162,7 @@
                            "<input type=\"text\" value=\"FogBUGZ User Name\" name=\" %@ \">"
                            "<input type=\"text\" value=\"Existing Project Name\" name=\" %@ \">"
                            "<input type=\"text\" value=\"Existing Area Name\" name=\" %@ \">"
-                           "<input type=\"text\" value=\"Description\" name=\"Description\">"
+                           "<input type=\"text\" value=\"Description\" name=\" %@ \">"
                            "<input type=\"text\" value=\"0\" name=\"ForceNewBug\">"
                            "<input type=\"text\" value=\"extra info\" name=\"Extra\">"
                            "<input type=\"text\" value=\"customer@emailaddress.com\" name=\"Email\">"
@@ -169,7 +170,7 @@
                            "<input type=\"text\" value=\"1\" name=\"FriendlyResponse\">"
                            "<input type=\"submit\">"
                            "</form>", 
-                          self.urlString, self.user, self.project, self.area];
+                          self.urlString, self.user, self.project, self.area, [crash objectForKey:@"Title"]];
   NSLog(@"Body: %@", bodyString);
   
   
