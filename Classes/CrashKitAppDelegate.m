@@ -8,36 +8,24 @@
 
 #import "CrashKitAppDelegate.h"
 #import "CrashController.h"
-#include <unistd.h>
+#import "RootViewController.h"
 
 @implementation CrashKitAppDelegate
 
-@synthesize window, rootViewController;
+@synthesize window, navigationController;
 
 #pragma mark -
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
+  RootViewController *r = [[RootViewController alloc] initWithStyle:UITableViewStylePlain];
+  navigationController = [[UINavigationController alloc] initWithRootViewController:r];
+  [r release];
   [window makeKeyAndVisible];
 	
   CrashController *crash = [CrashController sharedInstance];
-//  [crash sendCrashReportsToEmail:@"crash@smartfulstudios.com"
-//              withViewController:rootViewController];
-  [crash sendCrashReportsToBugzScoutURL:@"https://mysite.fogbugz.com/scoutsubmit.asp" 
-                               withUser:@"Parveen Kaler"
-                             forProject:@"Inbox"
-                               withArea:@"Misc"];
   crash.delegate = self;
-  
-
-  [self performSelector:@selector(sigabrt) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigbus) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigfpe) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigill) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigpipe) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(sigsegv) withObject:nil afterDelay:0.1];
-//  [self performSelector:@selector(throwNSException) withObject:nil afterDelay:0.1];
   
 	return YES;
 }
@@ -56,62 +44,11 @@
 #pragma mark -
 #pragma mark Memory management
 
-- (void)dealloc {
+- (void)dealloc 
+{
+  [navigationController release];
   [window release];
   [super dealloc];
 }
-
-#pragma mark -
-#pragma mark Test Methods
-
-- (void)sigabrt
-{
-  abort();
-}
-
-- (void)sigbus
-{
-  void (*func)() = 0;
-  func();
-}
-
-- (void)sigfpe
-{
-  int zero = 0;  // LLVM is smart and actually catches divide by zero if it is constant
-  int i = 10/zero;
-  NSLog(@"Int: %i", i);
-}
-
-- (void)sigill
-{
-  typedef void(*FUNC)(void);
-  const static unsigned char insn[4] = { 0xff, 0xff, 0xff, 0xff };
-  void (*func)() = (FUNC)insn;
-  func();
-}
-
-- (void)sigpipe
-{
-  // Hmm, can't actually generate a SIGPIPE.
-  FILE *f = popen("ls", "r");
-  const char *buf[128];
-  pwrite(fileno(f), buf, 128, 0);
-}
-
-- (void)sigsegv
-{
-  // This actually raises a SIGBUS.
-  NSString *str = [[NSString alloc] initWithUTF8String:"SIGSEGV STRING"];
-  [str release];
-  NSLog(@"String %@", str);
-}
-
-- (void)throwNSException
-{
-  NSException *e = [NSException exceptionWithName:@"TestException" reason:@"Testing CrashKit" userInfo:nil];
-  @throw e;
-}  
-
-
 
 @end

@@ -12,11 +12,11 @@
 @interface CrashKitAppDelegate : NSObject <UIApplicationDelegate, CrashSaveDelegate> 
 {
   UIWindow *window;
-  UIViewController *rootViewController;
+  UINavigationController *navigationController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UIViewController *rootViewController;
+@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 
 @end
 

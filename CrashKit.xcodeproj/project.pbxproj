@@ -15,6 +15,8 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		4E9F223C1208C7C200F0FFB3 /* CrashLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9F223B1208C7C200F0FFB3 /* CrashLogger.m */; };
 		4E9F22801208CED900F0FFB3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9F227F1208CED900F0FFB3 /* MessageUI.framework */; };
+		4EA5332F120A39BF0057F52D /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA5332E120A39BF0057F52D /* RootViewController.m */; };
+		4EA53338120A3A5D0057F52D /* SelectCrashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA53337120A3A5D0057F52D /* SelectCrashViewController.m */; };
 		4ECC9B681207769100FEA9E0 /* CrashController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECC9B671207769100FEA9E0 /* CrashController.m */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +33,10 @@
 		4E9F223A1208C7C200F0FFB3 /* CrashLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashLogger.h; sourceTree = "<group>"; };
 		4E9F223B1208C7C200F0FFB3 /* CrashLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashLogger.m; sourceTree = "<group>"; };
 		4E9F227F1208CED900F0FFB3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		4EA5332D120A39BF0057F52D /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		4EA5332E120A39BF0057F52D /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		4EA53336120A3A5D0057F52D /* SelectCrashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectCrashViewController.h; sourceTree = "<group>"; };
+		4EA53337120A3A5D0057F52D /* SelectCrashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectCrashViewController.m; sourceTree = "<group>"; };
 		4ECC9B661207769100FEA9E0 /* CrashController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashController.h; sourceTree = "<group>"; };
 		4ECC9B671207769100FEA9E0 /* CrashController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* CrashKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CrashKit-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -60,6 +66,10 @@
 				4ECC9B671207769100FEA9E0 /* CrashController.m */,
 				4E9F223A1208C7C200F0FFB3 /* CrashLogger.h */,
 				4E9F223B1208C7C200F0FFB3 /* CrashLogger.m */,
+				4EA5332D120A39BF0057F52D /* RootViewController.h */,
+				4EA5332E120A39BF0057F52D /* RootViewController.m */,
+				4EA53336120A3A5D0057F52D /* SelectCrashViewController.h */,
+				4EA53337120A3A5D0057F52D /* SelectCrashViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -170,6 +180,8 @@
 				1D3623260D0F684500981E51 /* CrashKitAppDelegate.m in Sources */,
 				4ECC9B681207769100FEA9E0 /* CrashController.m in Sources */,
 				4E9F223C1208C7C200F0FFB3 /* CrashLogger.m in Sources */,
+				4EA5332F120A39BF0057F52D /* RootViewController.m in Sources */,
+				4EA53338120A3A5D0057F52D /* SelectCrashViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
