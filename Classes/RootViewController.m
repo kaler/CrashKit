@@ -59,7 +59,7 @@
   }
   else
   {
-    [crash sendCrashReportsToBugzScoutURL:@"https://mysite.fogbugz.com/scoutsubmit.asp" 
+    [crash sendCrashReportsToBugzScoutURL:@"https://smartfulstudios.fogbugz.com/scoutsubmit.asp"
                                  withUser:@"Parveen Kaler"
                                forProject:@"Inbox"
                                  withArea:@"Misc"];

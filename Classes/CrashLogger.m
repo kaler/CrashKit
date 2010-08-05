@@ -123,13 +123,13 @@
 #pragma mark -
 
 @implementation CrashBugzScoutLogger
-@synthesize url, user, project, area;
+@synthesize urlString, user, project, area;
 
 - (id)initWithURL:(NSString*)aUrl user:(NSString *)aUser project:(NSString *)aProject area:(NSString *)aArea
 {
   if ((self = [super init]))
   {
-    url = [aUrl copy];
+    urlString = [aUrl copy];
     user = [aUser copy];
     project = [aProject copy];
     area = [aArea copy];
@@ -140,7 +140,7 @@
 
 - (void)dealloc
 {
-  [url release];
+  [urlString release];
   [user release];
   [project release];
   [area release];
@@ -150,9 +150,47 @@
 
 - (void)sendCrash:(NSDictionary *)crash
 {
-  NSLog(@"CrashBugzScoutLogger sendCrash: %@, %@, %@, %@", self.url, self.user, self.project, self.area);
-  [self pumpRunLoop];
+  NSLog(@"CrashBugzScoutLogger sendCrash: %@, %@, %@, %@", self.urlString, self.user, self.project, self.area);
+
+  NSURL *url = [NSURL URLWithString:self.urlString];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+  [request setHTTPMethod:@"POST"];
+  [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+  NSString *bodyString = [NSString stringWithFormat:
+                          @"<form method=\"post\" action=\" %@ \">"
+                           "<input type=\"text\" value=\"FogBUGZ User Name\" name=\" %@ \">"
+                           "<input type=\"text\" value=\"Existing Project Name\" name=\" %@ \">"
+                           "<input type=\"text\" value=\"Existing Area Name\" name=\" %@ \">"
+                           "<input type=\"text\" value=\"Description\" name=\"Description\">"
+                           "<input type=\"text\" value=\"0\" name=\"ForceNewBug\">"
+                           "<input type=\"text\" value=\"extra info\" name=\"Extra\">"
+                           "<input type=\"text\" value=\"customer@emailaddress.com\" name=\"Email\">"
+                           "<input type=\"text\" value=\"html Default Message\" name=\"ScoutDefaultMessage\">"
+                           "<input type=\"text\" value=\"1\" name=\"FriendlyResponse\">"
+                           "<input type=\"submit\">"
+                           "</form>", 
+                          self.urlString, self.user, self.project, self.area];
+  NSLog(@"Body: %@", bodyString);
   
+  
+  NSData *data = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+  [request setHTTPBody:data];
+  
+  NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+  [connection start];
+  
+  [self pumpRunLoop];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+  NSLog(@"Connection Did Fail");
+  self.finishPump = YES;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+  NSLog(@"Connection Did Finish Loading");
   self.finishPump = YES;
 }
 
