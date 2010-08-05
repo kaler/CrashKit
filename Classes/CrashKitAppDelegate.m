@@ -22,6 +22,7 @@
   RootViewController *r = [[RootViewController alloc] initWithStyle:UITableViewStylePlain];
   navigationController = [[UINavigationController alloc] initWithRootViewController:r];
   [r release];
+  [window addSubview:navigationController.view];
   [window makeKeyAndVisible];
 	
   CrashController *crash = [CrashController sharedInstance];
