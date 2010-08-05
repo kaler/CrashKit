@@ -20,6 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
   RootViewController *r = [[RootViewController alloc] initWithStyle:UITableViewStylePlain];
+  r.title = @"Root View Controller";
   navigationController = [[UINavigationController alloc] initWithRootViewController:r];
   [r release];
   [window addSubview:navigationController.view];
