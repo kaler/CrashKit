@@ -60,7 +60,7 @@
   else
   {
     [crash sendCrashReportsToBugzScoutURL:@"https://smartfulstudios.fogbugz.com/api.asp"
-                                 withUser:@""
+                                 withUser:@".com"
                                  password:@""
                                forProject:@"Inbox"
                                  withArea:@"Misc"];

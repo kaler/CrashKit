@@ -122,8 +122,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 
+@interface CrashBugzScoutLogger()
+@property (nonatomic, retain) NSXMLParser *parser;
+@end
+
 @implementation CrashBugzScoutLogger
 @synthesize token, urlString, project, area;
+@synthesize parser;
 
 - (id)initWithURL:(NSString*)aUrl user:(NSString *)aUser password:aPassword project:(NSString *)aProject area:(NSString *)aArea
 {
@@ -147,9 +152,11 @@
 
 - (void)dealloc
 {
+  [token release];
   [urlString release];
   [project release];
   [area release];
+  [parser release];
   
   [super dealloc];
 }
@@ -167,8 +174,8 @@
 
 - (NSString*)createPostParametersStringWithDescription:(NSString*)description extra:(NSString*)extra
 {
-  NSString *fmt = @"cmd=new&sScoutDescription=%@&sProject=%@&sArea=%@&sScoutMessage=%@";
-  NSString *str = [NSString stringWithFormat:fmt, description, self.project, self.area, extra];
+  NSString *fmt = @"cmd=new&sScoutDescription=%@&sProject=%@&sArea=%@&sScoutMessage=%@&token=%@";
+  NSString *str = [NSString stringWithFormat:fmt, description, self.project, self.area, extra, token];
   
   return [self urlEncodeString:str];
 }
@@ -210,9 +217,29 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
 {
-  NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-  NSLog(@"Did receive data: %@", str);
-  [str release];
+  if ([token compare:@""] == NSOrderedSame) // gonna assume it's a logon request
+  {
+    NSLog(@"Parse token");
+    parser = [[NSXMLParser alloc] initWithData:data];
+    parser.delegate = self;
+    [parser parse];
+  }
+  else
+  {
+    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"Response: %@", str);
+    [str release];
+  }
+  
+}
+
+#pragma mark NSXMLParserDelegate
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
+  NSString *str = [[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding];
+  self.token = str;
+  NSLog(@"Token: %@", self.token);
+  [self.parser abortParsing];
 }
 
 @end

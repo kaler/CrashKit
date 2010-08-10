@@ -36,12 +36,13 @@
 @end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@interface CrashBugzScoutLogger : CrashLogger
+@interface CrashBugzScoutLogger : CrashLogger <NSXMLParserDelegate>
 {
   NSString *token;
   NSString *urlString;
   NSString *project;
   NSString *area;
+  NSXMLParser *parser;
 }
 
 - (id)initWithURL:(NSString*)aURL user:(NSString*)aUser password:(NSString*)aPassword project:(NSString*)aProject area:(NSString*)aArea;
