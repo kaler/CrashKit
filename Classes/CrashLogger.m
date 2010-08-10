@@ -31,11 +31,13 @@
 
 - (void)pumpRunLoop
 {
+  self.finishPump = NO;
+
   CFRunLoopRef runLoop = CFRunLoopGetCurrent();
 	CFArrayRef runLoopModesRef = CFRunLoopCopyAllModes(runLoop);
   NSArray * runLoopModes = (NSArray*)runLoopModesRef;
 	
-	while (finishPump == NO)
+	while (self.finishPump == NO)
 	{
 		for (NSString *mode in runLoopModes)
 		{
@@ -102,7 +104,6 @@
     [self.rootViewController presentModalViewController:picker animated:YES];
     [picker release];
     
-    self.finishPump = NO;
     [self pumpRunLoop];
   }
   else
@@ -190,7 +191,7 @@
 
   NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
   [connection start];
-  
+
   [self pumpRunLoop];
 }
 
@@ -219,7 +220,6 @@
 {
   if ([token compare:@""] == NSOrderedSame) // gonna assume it's a logon request
   {
-    NSLog(@"Parse token");
     parser = [[NSXMLParser alloc] initWithData:data];
     parser.delegate = self;
     [parser parse];
