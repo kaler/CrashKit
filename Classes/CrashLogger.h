@@ -38,17 +38,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @interface CrashBugzScoutLogger : CrashLogger
 {
+  NSString *token;
   NSString *urlString;
-  NSString *user;
   NSString *project;
   NSString *area;
 }
 
-- (id)initWithURL:(NSString*)aURL user:(NSString*)aUser project:(NSString*)aProject area:(NSString*)aArea;
+- (id)initWithURL:(NSString*)aURL user:(NSString*)aUser password:(NSString*)aPassword project:(NSString*)aProject area:(NSString*)aArea;
 - (void)sendCrash:(NSDictionary*)crash;
 
+@property (nonatomic, copy) NSString *token;
 @property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, copy) NSString *user;
 @property (nonatomic, copy) NSString *project;
 @property (nonatomic, copy) NSString *area;
 

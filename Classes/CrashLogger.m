@@ -123,16 +123,23 @@
 #pragma mark -
 
 @implementation CrashBugzScoutLogger
-@synthesize urlString, user, project, area;
+@synthesize token, urlString, project, area;
 
-- (id)initWithURL:(NSString*)aUrl user:(NSString *)aUser project:(NSString *)aProject area:(NSString *)aArea
+- (id)initWithURL:(NSString*)aUrl user:(NSString *)aUser password:aPassword project:(NSString *)aProject area:(NSString *)aArea
 {
   if ((self = [super init]))
   {
+    token = [@"" copy];
     urlString = [aUrl copy];
-    user = [aUser copy];
     project = [aProject copy];
     area = [aArea copy];
+    
+    NSString *fmt = @"%@?cmd=logon&email=%@&password=%@";
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:fmt, aUrl, aUser, aPassword]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    [connection start];
   }
   
   return self;
@@ -141,7 +148,6 @@
 - (void)dealloc
 {
   [urlString release];
-  [user release];
   [project release];
   [area release];
   

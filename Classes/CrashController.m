@@ -146,9 +146,9 @@ void uncaughtExceptionHandler(NSException *exception)
   self.logger = [[CrashEmailLogger alloc] initWithEmail:toEmail viewController:rootViewController];
 }
 
-- (void)sendCrashReportsToBugzScoutURL:(NSString*)aURL withUser:(NSString*)aUser forProject:(NSString*)aProject withArea:(NSString*)aArea;
+- (void)sendCrashReportsToBugzScoutURL:(NSString*)aURL withUser:(NSString*)aUser password:(NSString*)aPassword forProject:(NSString*)aProject withArea:(NSString*)aArea;
 {
-  self.logger = [[CrashBugzScoutLogger alloc] initWithURL:aURL user:aUser project:aProject area:aArea];
+  self.logger = [[CrashBugzScoutLogger alloc] initWithURL:aURL user:aUser password:aPassword project:aProject area:aArea];
 }
 
 - (NSArray*)callstackAsArray
