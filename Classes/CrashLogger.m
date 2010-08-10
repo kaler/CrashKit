@@ -148,51 +148,65 @@
   [super dealloc];
 }
 
+
+- (NSString*)urlEncodeString:(NSString *)str
+{
+  NSString * encodedString = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                                                 (CFStringRef)str,
+                                                                                 NULL,
+                                                                                 (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                                 kCFStringEncodingUTF8 );
+  return encodedString;
+}
+
+- (NSString*)createPostParametersStringWithDescription:(NSString*)description extra:(NSString*)extra
+{
+  NSString *fmt = @"cmd=new&sScoutDescription=%@&sProject=%@&sArea=%@&sScoutMessage=%@";
+  NSString *str = [NSString stringWithFormat:fmt, description, self.project, self.area, extra];
+  
+  return [self urlEncodeString:str];
+}
+
+
 - (void)sendCrash:(NSDictionary *)crash
 {
-  NSLog(@"Crash: %@", crash);
-  NSLog(@"CrashBugzScoutLogger sendCrash: %@, %@, %@, %@", self.urlString, self.user, self.project, self.area);
-
-  NSURL *url = [NSURL URLWithString:self.urlString];
+  NSString *post = [self createPostParametersStringWithDescription:[crash objectForKey:@"Title"] extra:[crash description]];
+  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", self.urlString, post]];
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-  [request setHTTPMethod:@"POST"];
-  [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
-  NSString *bodyString = [NSString stringWithFormat:
-                          @"<form method=\"post\" action=\" %@ \">"
-                           "<input type=\"text\" value=\"FogBUGZ User Name\" name=\" %@ \">"
-                           "<input type=\"text\" value=\"Existing Project Name\" name=\" %@ \">"
-                           "<input type=\"text\" value=\"Existing Area Name\" name=\" %@ \">"
-                           "<input type=\"text\" value=\"Description\" name=\" %@ \">"
-                           "<input type=\"text\" value=\"0\" name=\"ForceNewBug\">"
-                           "<input type=\"text\" value=\"extra info\" name=\"Extra\">"
-                           "<input type=\"text\" value=\"customer@emailaddress.com\" name=\"Email\">"
-                           "<input type=\"text\" value=\"html Default Message\" name=\"ScoutDefaultMessage\">"
-                           "<input type=\"text\" value=\"1\" name=\"FriendlyResponse\">"
-                           "<input type=\"submit\">"
-                           "</form>", 
-                          self.urlString, self.user, self.project, self.area, [crash objectForKey:@"Title"]];
-  NSLog(@"Body: %@", bodyString);
-  
-  
-  NSData *data = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
-  [request setHTTPBody:data];
-  
+  [request setHTTPMethod:@"GET"];
+
   NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
   [connection start];
   
   [self pumpRunLoop];
 }
 
+
+
+#pragma mark URL Connection Delegate
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response 
+{
+//  NSHTTPURLResponse *r = (NSHTTPURLResponse*)response;
+//  NSLog(@"Did Receive Response: %@", [NSHTTPURLResponse localizedStringForStatusCode:[r statusCode]]);
+}
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-  NSLog(@"Connection Did Fail");
+//  NSLog(@"Connection Did Fail");
   self.finishPump = YES;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-  NSLog(@"Connection Did Finish Loading");
+//  NSLog(@"Connection Did Finish Loading: %@", connection);
   self.finishPump = YES;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
+{
+  NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  NSLog(@"Did receive data: %@", str);
+  [str release];
 }
 
 @end
