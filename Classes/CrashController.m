@@ -155,9 +155,10 @@ void uncaughtExceptionHandler(NSException *exception)
 {
   void* callstack[128];
   const int numFrames = backtrace(callstack, 128);
+  assert(numFrames >= 0);
   char **symbols = backtrace_symbols(callstack, numFrames);
   
-  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:numFrames];
+  NSMutableArray *arr = [NSMutableArray arrayWithCapacity:(numFrames >= 0 ? (NSUInteger)numFrames : 0)];
   for (int i = 0; i < numFrames; ++i) 
   {
     [arr addObject:[NSString stringWithUTF8String:symbols[i]]];
