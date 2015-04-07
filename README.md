@@ -1,6 +1,6 @@
 CrashKit
 ===
-CrashKit catches uncaught exceptions, traps signals, and sends them to developers by email or straight to your bug database. More info at this blog post, [CrashKit: Helping Your iOS/iPhone Apps Suck Less](http://parveenkaler.com/2010/08/11/crashkit-helping-your-iphone-apps-suck-less/).
+CrashKit catches uncaught exceptions, traps signals, and sends them to developers by email or straight to your bug database. More info at this blog post, [CrashKit: Helping Your iOS/iPhone Apps Suck Less](http://parveenkaler.com/posts/crashkit-helping-your-iphone-apps-suck-less/).
 
 LICENSE (MIT)
 ---
